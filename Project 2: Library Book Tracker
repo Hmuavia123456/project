@@ -12,7 +12,6 @@ def load():
 
 books = load()
 
-# Features
 def add():
     t = input("Title: ")
     a = input("Author: ")
@@ -53,7 +52,6 @@ def find():
             return
     print("Not found.\n")
 
-# Menu
 while True:
     print("\n1.Add  2.Show  3.Issue  4.Return  5.Search  6.Exit")
     ch = input("Choice: ")
