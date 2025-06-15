@@ -6,36 +6,79 @@ try:
     with open(filename, "r") as file:
         students = json.load(file)
 except:
-    students = [
-        {"name": "Hassan", "roll": 100, "class": "10th", "marks": 88},
-        {"name": "Ali", "roll": 200, "class": "9th", "marks": 76},
-        {"name": "Khatam", "roll": 300, "class": "10th", "marks": 92}
-    ]
+    students = []
 
-new_student = {"name": "Amina", "roll": 500, "class": "9th", "marks": 88}
-students.append(new_student)
+def add_student():
+    name = input("Enter Name: ")
+    roll = int(input("Enter Roll Number: "))
+    class_name = input("Enter Class: ")
+    marks = int(input("Enter Marks: "))
+    student = {"name": name, "roll": roll, "class": class_name, "marks": marks}
+    students.append(student)
+    print("Student added successfully!\n")
 
-print("All Students:")
-for student in students:
-    print(student)
+def display_students():
+    if not students:
+        print("No students found.\n")
+        return
+    print("\nAll Students:")
+    for s in students:
+        print(f"Name: {s['name']}, Roll: {s['roll']}, Class: {s['class']}, Marks: {s['marks']}")
+    print()
 
-print("Searching Roll 300:")
-for student in students:
-    if student['roll'] == 300:
-        print(student)
+def search_student():
+    roll = int(input("Enter Roll Number to Search: "))
+    for s in students:
+        if s['roll'] == roll:
+            print(f"Found: Name: {s['name']}, Class: {s['class']}, Marks: {s['marks']}\n")
+            return
+    print("Student not found.\n")
 
-for student in students:
-    if student['roll'] == 200:
-        student['name'] = "Ali Raza"
-        student['marks'] = 95
+def update_student():
+    roll = int(input("Enter Roll Number to Update: "))
+    for s in students:
+        if s['roll'] == roll:
+            s['name'] = input("Enter New Name: ")
+            s['class'] = input("Enter New Class: ")
+            s['marks'] = int(input("Enter New Marks: "))
+            print("Student updated successfully!\n")
+            return
+    print("Student not found.\n")
 
-students = [s for s in students if s['roll'] != 100]
+def delete_student():
+    roll = int(input("Enter Roll Number to Delete: "))
+    global students
+    students = [s for s in students if s['roll'] != roll]
+    print("Student deleted if existed.\n")
 
-print("Final List:")
-for student in students:
-    print(student)
+def save_data():
+    with open(filename, "w") as file:
+        json.dump(students, file, indent=4)
+    print("Data saved to file.\n")
 
-with open(filename, "w") as file:
-    json.dump(students, file, indent=4)
+while True:
+    print("======= Student Management System =======")
+    print("1. Add Student")
+    print("2. Display Students")
+    print("3. Search Student")
+    print("4. Update Student")
+    print("5. Delete Student")
+    print("6. Save & Exit")
+    choice = input("Enter your choice (1-6): ")
 
-print("Data saved.")
+    if choice == "1":
+        add_student()
+    elif choice == "2":
+        display_students()
+    elif choice == "3":
+        search_student()
+    elif choice == "4":
+        update_student()
+    elif choice == "5":
+        delete_student()
+    elif choice == "6":
+        save_data()
+        print("Exiting program...")
+        break
+    else:
+        print("Invalid choice. Please try again.\n")
