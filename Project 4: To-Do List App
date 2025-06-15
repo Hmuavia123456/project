@@ -1,16 +1,16 @@
-import os
 import json
 
-FILENAME = "todo_list.json"
+filename = "tasks.json"
 
 def load_tasks():
-    if os.path.exists(FILENAME):
-        with open(FILENAME, "r") as file:
+    try:
+        with open(filename, "r") as file:
             return json.load(file)
-    return []
+    except:
+        return []
 
 def save_tasks(tasks):
-    with open(FILENAME, "w") as file:
+    with open(filename, "w") as file:
         json.dump(tasks, file)
 
 tasks = load_tasks()
@@ -21,33 +21,33 @@ def add_task():
     save_tasks(tasks)
     print("Task added.\n")
 
-def view_tasks():
+def show_tasks():
     if not tasks:
         print("No tasks found.\n")
         return
-    print("\n To-Do List:")
-    for idx, t in enumerate(tasks, start=1):
-        status = "Done" if t["done"] else "⏳ Pending"
-        print(f"{idx}. {t['task']} [{status}]")
+    print("\nTo-Do List:")
+    for i, t in enumerate(tasks, 1):
+        status = "Done" if t["done"] else "Pending"
+        print(f"{i}. {t['task']} [{status}]")
     print()
 
-def mark_done():
-    view_tasks()
+def complete_task():
+    show_tasks()
     num = int(input("Enter task number to mark as done: "))
     if 1 <= num <= len(tasks):
-        tasks[num-1]["done"] = True
+        tasks[num - 1]["done"] = True
         save_tasks(tasks)
         print("Task marked as done.\n")
     else:
         print("Invalid task number.\n")
 
 def delete_task():
-    view_tasks()
+    show_tasks()
     num = int(input("Enter task number to delete: "))
     if 1 <= num <= len(tasks):
-        deleted = tasks.pop(num-1)
+        removed = tasks.pop(num - 1)
         save_tasks(tasks)
-        print(f"Deleted: {deleted['task']}\n")
+        print(f"Deleted: {removed['task']}\n")
     else:
         print("Invalid task number.\n")
 
@@ -63,13 +63,13 @@ while True:
     if choice == "1":
         add_task()
     elif choice == "2":
-        view_tasks()
+        show_tasks()
     elif choice == "3":
-        mark_done()
+        complete_task()
     elif choice == "4":
         delete_task()
     elif choice == "5":
-        print(" Exiting. Bye!")
+        print("Exiting. Goodbye!")
         break
     else:
-        print(" Invalid option.\n")
+        print("Invalid choice.\n")
