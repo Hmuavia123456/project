@@ -1,75 +1,78 @@
-import os
 import json
-FILENAME = "bank_accounts.json"
+
+file_name = "accounts.json"
 
 def load_accounts():
-    if os.path.exists(FILENAME):
-        with open(FILENAME, "r") as file:
+    try:
+        with open(file_name, "r") as file:
             return json.load(file)
-    return {}
+    except:
+        return {}
 
 def save_accounts(accounts):
-    with open(FILENAME, "w") as file:
+    with open(file_name, "w") as file:
         json.dump(accounts, file)
 
 accounts = load_accounts()
 
 def create_account():
-    acc_num = input("Enter account number: ")
-    if acc_num in accounts:
-        print("Account already exists.\n")
+    number = input("Account Number: ")
+    if number in accounts:
+        print("Account already exists.")
         return
-    name = input("Enter name: ")
-    accounts[acc_num] = {"name": name, "balance": 0, "history": []}
+    name = input("Account Holder Name: ")
+    accounts[number] = {"name": name, "balance": 0, "history": []}
     save_accounts(accounts)
-    print("Account created.\n")
+    print("Account created.")
 
 def deposit():
-    acc_num = input("Enter account number: ")
-    if acc_num in accounts:
-        amount = float(input("Enter amount to deposit: "))
-        accounts[acc_num]["balance"] += amount
-        accounts[acc_num]["history"].append(f"Deposit: +{amount}")
-        save_accounts(accounts)
-        print("Deposit successful.\n")
+    number = input("Account Number: ")
+    if number in accounts:
+        try:
+            amount = float(input("Amount to deposit: "))
+            accounts[number]["balance"] += amount
+            accounts[number]["history"].append(f"Deposit: +{amount}")
+            save_accounts(accounts)
+            print("Amount deposited.")
+        except:
+            print("Invalid amount.")
     else:
-        print("Account not found")
+        print("Account not found.")
 
 def withdraw():
-    acc_num = input("Enter account number: ")
-    if acc_num in accounts:
-        amount = float(input("Enter amount to withdraw: "))
-        if accounts[acc_num]["balance"] >= amount:
-            accounts[acc_num]["balance"] -= amount
-            accounts[acc_num]["history"].append(f"Withdraw: -{amount}")
-            save_accounts(accounts)
-            print("Withdrawal successful.\n")
-        else:
-            print("Insufficient balance.\n")
+    number = input("Account Number: ")
+    if number in accounts:
+        try:
+            amount = float(input("Amount to withdraw: "))
+            if accounts[number]["balance"] >= amount:
+                accounts[number]["balance"] -= amount
+                accounts[number]["history"].append(f"Withdraw: -{amount}")
+                save_accounts(accounts)
+                print("Amount withdrawn.")
+            else:
+                print("Insufficient balance.")
+        except:
+            print("Invalid amount.")
     else:
-        print("Account not found.\n")
+        print("Account not found.")
 
 def check_balance():
-    acc_num = input("Enter account number: ")
-    if acc_num in accounts:
-        balance = accounts[acc_num]["balance"]
-        print(f"Current Balance: {balance}\n")
+    number = input("Account Number: ")
+    if number in accounts:
+        print(f"Balance: {accounts[number]['balance']}")
     else:
-        print("Account not found.\n")
+        print("Account not found.")
 
 def transaction_history():
-    acc_num = input("Enter account number: ")
-    if acc_num in accounts:
-        print(f"\nTransaction History for {accounts[acc_num]['name']}:")
-        for t in accounts[acc_num]["history"]:
-            print(" -", t)
-        print()
+    number = input("Account Number: ")
+    if number in accounts:
+        for t in accounts[number]["history"]:
+            print("-", t)
     else:
-        print("Account not found.\n")
-
+        print("Account not found.")
 
 while True:
-    print("1. Create account")
+    print("\n1. Create Account")
     print("2. Deposit")
     print("3. Withdraw")
     print("4. Check Balance")
@@ -89,7 +92,7 @@ while True:
     elif choice == "5":
         transaction_history()
     elif choice == "6":
-        print("Exiting. Thank you!")
+        print("Exiting...")
         break
     else:
-        print("Invalid option.\n")
+        print("Invalid option.")
